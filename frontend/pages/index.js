@@ -1,6 +1,9 @@
 import React from "react";
+import {useRouter} from 'next/router';
 
 export default function HomeScreen() {
+  const router = useRouter();
+
   const [values, setValues] = React.useState({
     usuario: "",
     senha: "",
@@ -18,6 +21,9 @@ export default function HomeScreen() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+
+    // router.push('/auth-page-ssr');
+    router.push('/auth-page-static');
   };
 
   return (
