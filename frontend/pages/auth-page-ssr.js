@@ -1,3 +1,5 @@
+import { tokenService } from "../src/services/auth/tokenService";
+
 export default function AuthPageSSR(props) {
   return (
     <div>
@@ -5,4 +7,12 @@ export default function AuthPageSSR(props) {
       <pre>{JSON.stringify(props, null, 2)}</pre>
     </div>
   );
+}
+
+export async function getServerSideProps(ctx) {
+  return {
+    props: {
+      token: tokenService.get(ctx),
+    },
+  };
 }
