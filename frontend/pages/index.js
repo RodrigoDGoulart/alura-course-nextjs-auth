@@ -31,12 +31,15 @@ export default function HomeScreen() {
         password: values.senha,
       })
       .then((res) => {
-        if (res === 401) {
-          alert("Email/senha inválido");
-        } else {
-          // redirecionar p/ uma das páginas
-          // router.push('/auth-page-ssr');
-          router.push("/auth-page-static");
+        switch (res) {
+          case 401: // não autorizado
+            alert("Email/senha inválido");
+            break;
+          case 200: // tudo certo
+            router.push("/auth-page-static");
+            break;
+          default: // demais erros
+            alert("Erro interno do servidor, tente novamente mais tarde.");
         }
       });
   };
