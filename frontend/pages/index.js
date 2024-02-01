@@ -1,5 +1,6 @@
 import React from "react";
-import {useRouter} from 'next/router';
+import { useRouter } from "next/router";
+import { authService } from "../src/services/auth/authService";
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -20,10 +21,24 @@ export default function HomeScreen() {
   };
 
   const handleSubmit = (event) => {
+    // não recarregar página
     event.preventDefault();
 
-    // router.push('/auth-page-ssr');
-    router.push('/auth-page-static');
+    // requisição p/ api
+    authService
+      .login({
+        username: values.usuario,
+        password: values.senha,
+      })
+      .then((res) => {
+        if (res === 401) {
+          alert("Email/senha inválido");
+        } else {
+          // redirecionar p/ uma das páginas
+          // router.push('/auth-page-ssr');
+          router.push("/auth-page-static");
+        }
+      });
   };
 
   return (
