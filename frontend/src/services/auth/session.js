@@ -1,7 +1,7 @@
 import { authService } from "./authService";
 
 export function withSession(callback) {
-  return async (ctx) => {
+  return async (ctx = null) => {
     const session = await authService.getSession(ctx);
     const modifiedCtx = {
       ...ctx,
