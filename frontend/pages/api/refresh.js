@@ -47,9 +47,20 @@ const controllers = {
       sameSite: "lax",
     });
 
-    res.json({
-      retorno,
-    });
+    if (retorno.status === 200) {
+      res.status(200).json({
+        status: 200,
+        data: retorno.body.data,
+      });
+    } else {
+      res.status(retorno.status).json({
+        status: retorno.status,
+        message:
+          retorno.status === 401
+            ? "Não autorizado"
+            : "Erro interno do servidor",
+      });
+    }
   },
 };
 
