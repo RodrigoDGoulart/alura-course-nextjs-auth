@@ -12,12 +12,22 @@ export const authService = {
           password,
         },
       }
-    ).then(async (res) => {
-      if (res.status === 200) {
-        tokenService.save(res.body.data.access_token);
-      }
-      return res.status;
-    });
+    )
+      .then(async (res) => {
+        const { refresh_token } = res.body.data;
+        const retorno = await HttpClient("api/refresh", {
+          method: "POST",
+          body: {
+            refresh_token,
+          },
+        });
+        console.log(retorno);
+
+        if (res.status === 200) {
+          tokenService.save(res.body.data.access_token);
+        }
+        return res.status;
+      })
   },
 
   async getSession(ctx) {
