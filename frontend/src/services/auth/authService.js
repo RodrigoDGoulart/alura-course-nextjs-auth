@@ -19,4 +19,18 @@ export const authService = {
       return res.status;
     });
   },
+
+  async getSession(ctx) {
+    const token = tokenService.get(ctx);
+
+    return HttpClient(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/session`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }).then((res) => ({
+      data: res.body.data,
+      status: res.status,
+    }));
+  },
 };
