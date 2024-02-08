@@ -1,16 +1,16 @@
 import nookies from "nookies";
-import { HttpClient } from "../../src/infra/HttpClient/httpClient";
+import { HttpClient } from "../../src/infra/HttpClient/HttpClient";
 
 const REFRESH_TOKEN = "REFRESH_TOKEN_NAME";
 
 const controllers = {
   async storeRefreshToken(req, res) {
     const ctx = { req, res };
-    console.log(req.body);
 
     nookies.set(ctx, REFRESH_TOKEN, req.body.refresh_token, {
       httpOnly: true,
       sameSite: "lax",
+      path: '/'
     });
 
     res.json({
@@ -45,6 +45,7 @@ const controllers = {
     nookies.set(ctx, REFRESH_TOKEN, retorno.body.data.refresh_token, {
       httpOnly: true,
       sameSite: "lax",
+      path: '/',
     });
 
     if (retorno.status === 200) {

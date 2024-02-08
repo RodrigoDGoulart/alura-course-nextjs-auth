@@ -1,4 +1,4 @@
-import { HttpClient } from "../../infra/HttpClient/httpClient";
+import { HttpClient } from "../../infra/HttpClient/HttpClient";
 import { tokenService } from "./tokenService";
 
 export const authService = {
@@ -12,22 +12,21 @@ export const authService = {
           password,
         },
       }
-    )
-      .then(async (res) => {
-        const { refresh_token } = res.body.data;
-        const retorno = await HttpClient("api/refresh", {
-          method: "POST",
-          body: {
-            refresh_token,
-          },
-        });
-        console.log(retorno);
+    ).then(async (res) => {
+      const { refresh_token } = res.body.data;
+      const retorno = await HttpClient("api/refresh", {
+        method: "POST",
+        body: {
+          refresh_token,
+        },
+      });
+      console.log(retorno);
 
-        if (res.status === 200) {
-          tokenService.save(res.body.data.access_token);
-        }
-        return res.status;
-      })
+      if (res.status === 200) {
+        tokenService.save(res.body.data.access_token);
+      }
+      return res.status;
+    });
   },
 
   async getSession(ctx) {
@@ -38,6 +37,7 @@ export const authService = {
       headers: {
         Authorization: `Bearer ${token}`,
       },
+      refresh: true,
     }).then((res) => ({
       data: res.body.data,
       status: res.status,
