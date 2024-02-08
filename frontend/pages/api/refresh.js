@@ -10,7 +10,7 @@ const controllers = {
     nookies.set(ctx, REFRESH_TOKEN, req.body.refresh_token, {
       httpOnly: true,
       sameSite: "lax",
-      path: '/'
+      path: "/",
     });
 
     res.json({
@@ -42,13 +42,11 @@ const controllers = {
       }
     );
 
-
-    
     if (retorno.status === 200) {
       nookies.set(ctx, REFRESH_TOKEN, retorno.body.data.refresh_token, {
         httpOnly: true,
         sameSite: "lax",
-        path: '/',
+        path: "/",
       });
 
       res.status(200).json({
@@ -65,12 +63,26 @@ const controllers = {
       });
     }
   },
+
+  async deleteTokens(req, res) {
+    const ctx = { req, res };
+    nookies.destroy(ctx, REFRESH_TOKEN, {
+      httpOnly: true,
+      sameSite: 'lax',
+      path: '/'
+    });
+
+    res.status(200).json({
+      ok: 'ok'
+    })
+  },
 };
 
 const controlledBy = {
   POST: controllers.storeRefreshToken,
   GET: controllers.regenerateTokens,
   PUT: controllers.regenerateTokens,
+  DELETE: controllers.deleteTokens,
 };
 
 export default function handler(req, res) {

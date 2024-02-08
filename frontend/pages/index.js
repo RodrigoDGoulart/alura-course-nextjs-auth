@@ -36,8 +36,8 @@ export default function HomeScreen() {
             alert("Email/senha inválido");
             break;
           case 200: // tudo certo
-            // router.push("/auth-page-static");
-            router.push("/auth-page-ssr");
+            router.push("/auth-page-static");
+            // router.push("/auth-page-ssr");
             break;
           default: // demais erros
             alert("Erro interno do servidor, tente novamente mais tarde.");
@@ -66,6 +66,12 @@ export default function HomeScreen() {
         />
         <div>
           <button>Entrar</button>
+        </div>
+        <div>
+          <a href="/auth-page-ssr">SSR</a>
+        </div>
+        <div>
+          <a href="/auth-page-static">STATIC</a>
         </div>
       </form>
       {/* <pre>{JSON.stringify(values, null, 2)}</pre> */}
