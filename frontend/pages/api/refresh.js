@@ -1,7 +1,7 @@
 import nookies from "nookies";
 import { HttpClient } from "../../src/infra/HttpClient/HttpClient";
 
-const REFRESH_TOKEN = "REFRESH_TOKEN_NAME";
+export const REFRESH_TOKEN = "REFRESH_TOKEN_NAME";
 
 const controllers = {
   async storeRefreshToken(req, res) {
@@ -30,7 +30,7 @@ const controllers = {
   async regenerateTokens(req, res) {
     const ctx = { req, res };
     const cookies = nookies.get(ctx);
-    const refresh_token = cookies[REFRESH_TOKEN];
+    const refresh_token = cookies[REFRESH_TOKEN] || req.body.refresh_token;
 
     const retorno = await HttpClient(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/refresh`,
@@ -42,13 +42,15 @@ const controllers = {
       }
     );
 
-    nookies.set(ctx, REFRESH_TOKEN, retorno.body.data.refresh_token, {
-      httpOnly: true,
-      sameSite: "lax",
-      path: '/',
-    });
 
+    
     if (retorno.status === 200) {
+      nookies.set(ctx, REFRESH_TOKEN, retorno.body.data.refresh_token, {
+        httpOnly: true,
+        sameSite: "lax",
+        path: '/',
+      });
+
       res.status(200).json({
         status: 200,
         data: retorno.body.data,
@@ -68,6 +70,7 @@ const controllers = {
 const controlledBy = {
   POST: controllers.storeRefreshToken,
   GET: controllers.regenerateTokens,
+  PUT: controllers.regenerateTokens,
 };
 
 export default function handler(req, res) {
